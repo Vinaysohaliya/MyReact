@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom React</title>
+</head>
+<body>
+
+  <div id="root"></div>
+
+  <script>
+    // Step 1: Create an object for the React element
+    const reactElement = {
+      type: 'a',
+      props: {
+        href: 'https://www.example.com',
+        target: '_blank',
+        children: 'Click me!',
+      },
+    };
+
+    // Step 2: Create a function to generate HTML code from the React element
+    function generateHtml(element) {
+      if (typeof element === 'string') {
+        return element;
+      }
+
+      const { type, props } = element;
+      const children = props.children || [];
+      const childrenHtml = children.map(child => generateHtml(child)).join('');
+
+      return `<${type} ${Object.keys(props).map(key => `${key}="${props[key]}"`).join(' ')}>${childrenHtml}</${type}>`;
+    }
+
+    // Step 3: Create a function to render the HTML in the specified path
+    function customRender(element, path) {
+      const rootElement = document.getElementById(path);
+      rootElement.innerHTML = generateHtml(element);
+    }
+
+    // Render the anchor tag
+    customRender(reactElement, 'root');
+  </script>
+
+</body>
+</html>
